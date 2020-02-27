@@ -9,9 +9,15 @@ import * as cartActions from '../../store/modules/cart/actions'
 import { ProductList } from './styles';
 
 
-function Home({amount}) {
+export default function Home() {
+
     const [products, setProducts] = useState([])
     const dispatch = useDispatch();
+
+    const amount = useSelector(state => state.cart.reduce((amount, product) => {
+        amount[product.id] = product.amount
+        return amount
+    }, {}))
 
     useEffect(() => {
         async function getProducts(){
@@ -52,12 +58,3 @@ function Home({amount}) {
     </ProductList>
   );
 }
-
-const mapStateToProps = state => ({
-  amount: state.cart.reduce((amount, product) => {
-      amount[product.id] = product.amount
-      return amount
-  }, {})
-});
-
-export default connect(mapStateToProps)(Home)
